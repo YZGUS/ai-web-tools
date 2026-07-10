@@ -1,0 +1,9 @@
+node_modules/
+runtime/sessions/**
+runtime/media/**
+runtime/logs/**
+!runtime/**/.gitkeep
+*.log
+.DS_Store
+.env
+.env.*

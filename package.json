@@ -1,0 +1,22 @@
+{
+  "name": "ai-web-tools",
+  "version": "0.0.0",
+  "private": true,
+  "description": "AI Web 端常用工具集成（结构骨架阶段，尚未实现）",
+  "type": "module",
+  "license": "UNLICENSED",
+  "scripts": {
+    "docs": "echo 'See docs/design/'"
+  },
+  "keywords": [
+    "ai",
+    "web",
+    "browser-automation",
+    "gemini",
+    "grok",
+    "chatgpt",
+    "claude",
+    "qianwen",
+    "telegram"
+  ]
+}
