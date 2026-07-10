@@ -73,7 +73,10 @@ node interfaces/cli/cli.mjs gemini gen image "一只猫" --new
 
 # ChatGPT Images 2.0
 npm run chatgpt:image -- "水彩橘猫"
-npm run chatgpt:chat -- "只回复ok" --new --new-tab
+
+# Grok Imagine
+npm run grok:image -- "水彩橘猫" --ratio 1:1
+npm run grok:video -- "海浪拍岸" --resolution 480p --duration 6s
 npm run status
 ```
 
@@ -85,17 +88,19 @@ import {
   closeBrowser,
   GeminiClient,
   ChatgptClient,
+  GrokImagineClient,
 } from './index.mjs';
 
 const browser = await connectBrowser();
 try {
   const g = await GeminiClient.attach(browser, { forceNewTab: true });
-  const r = await g.chat('你好', { newChat: true });
-  console.log(r.reply);
+  console.log((await g.chat('你好', { newChat: true })).reply);
 
   const c = await ChatgptClient.attach(browser, { forceNewTab: true });
-  const img = await c.generateImage('水彩橘猫');
-  console.log(img.imagePath);
+  console.log((await c.generateImage('水彩橘猫')).imagePath);
+
+  const gi = await GrokImagineClient.attach(browser, { forceNewTab: true });
+  console.log((await gi.generateImage('水彩橘猫', { ratio: '1:1' })).filePath);
 } finally {
   await closeBrowser(browser);
 }
@@ -119,6 +124,7 @@ try {
 | `shared/` browser · session · types | ✅ |
 | `providers/gemini` | ✅ 全量接口 |
 | `providers/chatgpt` | ✅ chat + Images 2.0 生图 |
-| `interfaces/cli` | ✅ gemini / chatgpt 子命令 |
+| `providers/grok` | ✅ Imagine 图/视频/多参考图 |
+| `interfaces/cli` | ✅ gemini / chatgpt / grok 子命令 |
 | Telegram adapter | 📄 manifest 部分 ready |
-| 其他 providers（千问/Grok/Claude） | 📄 文档 / 待实现 |
+| 其他 providers（千问/Claude） | 📄 文档 / 待实现 |

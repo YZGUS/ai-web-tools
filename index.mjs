@@ -34,3 +34,14 @@ export {
   CHATGPT_TOOL_DEFINITIONS,
   runChatgptTool,
 } from './providers/chatgpt/index.mjs';
+export {
+  GrokImagineClient,
+  IMAGINE_MODES,
+  GROK_URL,
+  GROK_ORIGIN,
+  GROK_IMAGINE_URL,
+  IMAGINE_MODE_LABELS,
+  IMAGINE_RATIOS,
+  GROK_TOOL_DEFINITIONS,
+  runGrokTool,
+} from './providers/grok/index.mjs';

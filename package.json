@@ -9,6 +9,7 @@
     ".": "./index.mjs",
     "./gemini": "./providers/gemini/index.mjs",
     "./chatgpt": "./providers/chatgpt/index.mjs",
+    "./grok": "./providers/grok/index.mjs",
     "./shared": "./shared/index.mjs"
   },
   "scripts": {
@@ -20,6 +21,9 @@
     "chatgpt:chat": "node interfaces/cli/cli.mjs chatgpt chat",
     "chatgpt:image": "node interfaces/cli/cli.mjs chatgpt image",
     "chatgpt:explore": "node interfaces/cli/cli.mjs chatgpt explore",
+    "grok:image": "node interfaces/cli/cli.mjs grok image",
+    "grok:video": "node interfaces/cli/cli.mjs grok video",
+    "grok:explore": "node interfaces/cli/cli.mjs grok explore",
     "status": "node interfaces/cli/cli.mjs status",
     "probe": "node interfaces/cli/cli.mjs probe",
     "test:smoke": "node tests/smoke/cdp.mjs",

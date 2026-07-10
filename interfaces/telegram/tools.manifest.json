@@ -18,6 +18,10 @@
     { "name": "web_canvas", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
     { "name": "gemini_explore", "status": "ready", "provider": "gemini" },
     { "name": "chatgpt_explore", "status": "ready", "provider": "chatgpt" },
-    { "name": "gemini_set_mode", "status": "ready", "provider": "gemini" }
+    { "name": "gemini_set_mode", "status": "ready", "provider": "gemini" },
+    { "name": "grok_imagine_image", "status": "ready", "provider": "grok", "via": "runGrokTool" },
+    { "name": "grok_imagine_video", "status": "ready", "provider": "grok", "via": "runGrokTool" },
+    { "name": "grok_imagine", "status": "ready", "provider": "grok", "via": "runGrokTool" },
+    { "name": "grok_imagine_explore", "status": "ready", "provider": "grok" }
   ]
 }
