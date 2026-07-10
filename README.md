@@ -57,31 +57,45 @@ ai-web-tools/
 | `web-auto` | 已废弃删除，由本项目接替 |
 | `test/page-automation`、`toolkit` | 历史实验/工具，**不依赖**；实现时可参考 |
 
-## 快速开始（Gemini）
+## 快速开始
 
 ```bash
 cd /Users/cengyi/Desktop/tools/ai-web-tools
 npm install
 npm run chrome:start
-# 调试 Chrome 登录 gemini.google.com
+# 调试 Chrome 登录 gemini.google.com 与/或 chatgpt.com
 
 npm run probe
+
+# Gemini
 node interfaces/cli/cli.mjs gemini chat "你好" --new --new-tab
-node interfaces/cli/cli.mjs gemini explore
 node interfaces/cli/cli.mjs gemini gen image "一只猫" --new
+
+# ChatGPT Images 2.0
+npm run chatgpt:image -- "水彩橘猫"
+npm run chatgpt:chat -- "只回复ok" --new --new-tab
 npm run status
 ```
 
 代码：
 
 ```js
-import { connectBrowser, closeBrowser, GeminiClient } from './index.mjs';
+import {
+  connectBrowser,
+  closeBrowser,
+  GeminiClient,
+  ChatgptClient,
+} from './index.mjs';
 
 const browser = await connectBrowser();
 try {
   const g = await GeminiClient.attach(browser, { forceNewTab: true });
   const r = await g.chat('你好', { newChat: true });
-  console.log(r.reply, r.session);
+  console.log(r.reply);
+
+  const c = await ChatgptClient.attach(browser, { forceNewTab: true });
+  const img = await c.generateImage('水彩橘猫');
+  console.log(img.imagePath);
 } finally {
   await closeBrowser(browser);
 }
@@ -93,10 +107,10 @@ try {
 |------|------|
 | [docs/guides/getting-started.md](./docs/guides/getting-started.md) | 入门 |
 | [docs/guides/gemini.md](./docs/guides/gemini.md) | Gemini 完整能力 |
+| [docs/guides/chatgpt.md](./docs/guides/chatgpt.md) | ChatGPT 对话 + 生图 |
 | [docs/guides/grok.md](./docs/guides/grok.md) | Grok |
 | [docs/guides/qianwen.md](./docs/guides/qianwen.md) | 千问 |
 | [docs/guides/claude.md](./docs/guides/claude.md) | Claude |
-| [docs/guides/chatgpt.md](./docs/guides/chatgpt.md) | ChatGPT |
 
 ## 实现状态
 
@@ -104,6 +118,7 @@ try {
 |------|------|
 | `shared/` browser · session · types | ✅ |
 | `providers/gemini` | ✅ 全量接口 |
-| 其他 providers | 📄 文档 / 待实现 |
-| `interfaces/cli` | ✅ Gemini 子命令 |
-| Telegram adapter | 📄 manifest 规划 |
+| `providers/chatgpt` | ✅ chat + Images 2.0 生图 |
+| `interfaces/cli` | ✅ gemini / chatgpt 子命令 |
+| Telegram adapter | 📄 manifest 部分 ready |
+| 其他 providers（千问/Grok/Claude） | 📄 文档 / 待实现 |

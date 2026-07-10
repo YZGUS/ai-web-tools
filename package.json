@@ -8,6 +8,7 @@
   "exports": {
     ".": "./index.mjs",
     "./gemini": "./providers/gemini/index.mjs",
+    "./chatgpt": "./providers/chatgpt/index.mjs",
     "./shared": "./shared/index.mjs"
   },
   "scripts": {
@@ -16,6 +17,9 @@
     "chrome:check": "bash scripts/chrome-check.sh",
     "gemini:chat": "node interfaces/cli/cli.mjs gemini chat",
     "gemini:explore": "node interfaces/cli/cli.mjs gemini explore",
+    "chatgpt:chat": "node interfaces/cli/cli.mjs chatgpt chat",
+    "chatgpt:image": "node interfaces/cli/cli.mjs chatgpt image",
+    "chatgpt:explore": "node interfaces/cli/cli.mjs chatgpt explore",
     "status": "node interfaces/cli/cli.mjs status",
     "probe": "node interfaces/cli/cli.mjs probe",
     "test:smoke": "node tests/smoke/cdp.mjs",

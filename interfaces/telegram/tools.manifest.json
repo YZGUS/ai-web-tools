@@ -1,18 +1,23 @@
 {
   "package": "ai-web-tools",
-  "version": "0.0.0",
-  "status": "planned",
+  "version": "0.1.0",
+  "status": "partial",
   "tools": [
     { "name": "app_list_providers", "status": "planned" },
     { "name": "app_list_tools", "status": "planned" },
     { "name": "app_session_status", "status": "planned" },
     { "name": "web_chat", "status": "planned" },
-    { "name": "web_image", "status": "planned" },
-    { "name": "web_video", "status": "planned" },
-    { "name": "web_music", "status": "planned" },
-    { "name": "web_research", "status": "planned" },
-    { "name": "web_canvas", "status": "planned" },
-    { "name": "gemini_explore", "status": "planned" },
-    { "name": "gemini_set_mode", "status": "planned" }
+    { "name": "web_image", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_image_chatgpt", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
+    { "name": "chatgpt_image", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
+    { "name": "chatgpt_chat", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
+    { "name": "gemini_chat", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_video", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_music", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_research", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_canvas", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "gemini_explore", "status": "ready", "provider": "gemini" },
+    { "name": "chatgpt_explore", "status": "ready", "provider": "chatgpt" },
+    { "name": "gemini_set_mode", "status": "ready", "provider": "gemini" }
   ]
 }
