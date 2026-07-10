@@ -1,5 +1,9 @@
 # providers/qianwen
 
-站点：https://www.qianwen.com  
+| 项 | 值 |
+|----|-----|
+| 站点 | https://www.qianwen.com |
+| 代码 | 待实现 |
+| 文档 | [docs/guides/qianwen.md](../../docs/guides/qianwen.md) |
 
-首期：对话 + 会话落盘。
+规划接口：`attach` / `open` / `newChat` / `chat` / `healthCheck`。

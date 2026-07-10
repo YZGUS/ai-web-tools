@@ -1,5 +1,9 @@
 # providers/claude
 
-站点：https://claude.ai  
+| 项 | 值 |
+|----|-----|
+| 站点 | https://claude.ai |
+| 代码 | 待实现 |
+| 文档 | [docs/guides/claude.md](../../docs/guides/claude.md) |
 
-首期：对话 + 会话落盘。
+规划接口：`attach` / `open` / `newChat` / `chat` / `healthCheck`。

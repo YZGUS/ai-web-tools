@@ -1,22 +1,41 @@
 {
   "name": "ai-web-tools",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": true,
-  "description": "AI Web 端常用工具集成（结构骨架阶段，尚未实现）",
+  "description": "AI Web 端常用工具集成：Gemini / Grok / 千问 / Claude / ChatGPT",
   "type": "module",
-  "license": "UNLICENSED",
+  "main": "index.mjs",
+  "exports": {
+    ".": "./index.mjs",
+    "./gemini": "./providers/gemini/index.mjs",
+    "./shared": "./shared/index.mjs"
+  },
   "scripts": {
-    "docs": "echo 'See docs/design/'"
+    "cli": "node interfaces/cli/cli.mjs",
+    "chrome:start": "bash scripts/chrome-start.sh",
+    "chrome:check": "bash scripts/chrome-check.sh",
+    "gemini:chat": "node interfaces/cli/cli.mjs gemini chat",
+    "gemini:explore": "node interfaces/cli/cli.mjs gemini explore",
+    "status": "node interfaces/cli/cli.mjs status",
+    "probe": "node interfaces/cli/cli.mjs probe",
+    "test:smoke": "node tests/smoke/cdp.mjs",
+    "test:gemini": "node tests/providers/gemini/full-suite.mjs",
+    "test:gemini:quick": "node tests/providers/gemini/full-suite.mjs --quick",
+    "test:gemini:e2e": "node tests/providers/gemini/e2e.mjs",
+    "test:gemini:media": "node tests/providers/gemini/media.mjs",
+    "test:gemini:bot": "node tests/providers/gemini/bot-tools.mjs"
+  },
+
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "puppeteer-core": "^25.2.1"
   },
   "keywords": [
     "ai",
-    "web",
-    "browser-automation",
     "gemini",
-    "grok",
-    "chatgpt",
-    "claude",
-    "qianwen",
+    "browser-automation",
     "telegram"
   ]
 }

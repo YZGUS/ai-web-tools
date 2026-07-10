@@ -1,7 +1,20 @@
 # providers/gemini
 
-**P0** 首个完整提供方。
+**状态：已实现**（自 `test/page-automation` 迁移）
 
-规划能力：对话、模式切换、上传与工具菜单、图片/视频/音乐/Research/Canvas、explore、会话落盘。
+## 模块
 
-实现时再填 `client/`、`tools/`、`selectors/`。
+| 路径 | 说明 |
+|------|------|
+| `client/gemini-client.mjs` | `GeminiClient` 全量接口 |
+| `selectors/ui.mjs` | URL / 编辑器 / 工具与模式别名 |
+| `tools/definitions.mjs` | Bot tool schema |
+| `tools/dispatch.mjs` | `runGeminiTool` 分发 |
+
+## 快速引用
+
+```js
+import { GeminiClient, runGeminiTool } from '../../index.mjs';
+```
+
+完整说明见 [docs/guides/gemini.md](../../docs/guides/gemini.md)。

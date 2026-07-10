@@ -6,7 +6,7 @@
 |----|-----|
 | 包名 | `ai-web-tools` |
 | 路径 | `tools/ai-web-tools` |
-| 阶段 | **仅目录结构 + 设计文档，无业务实现** |
+| 阶段 | **Gemini 已实现**；其余提供方文档就绪、代码待办 |
 
 ## 解决什么问题
 
@@ -57,10 +57,53 @@ ai-web-tools/
 | `web-auto` | 已废弃删除，由本项目接替 |
 | `test/page-automation`、`toolkit` | 历史实验/工具，**不依赖**；实现时可参考 |
 
-## 当前不做
+## 快速开始（Gemini）
 
-- 不写 Puppeteer / 提供方自动化实现  
-- 不接 Telegram 真机逻辑  
-- 不迁历史代码  
+```bash
+cd /Users/cengyi/Desktop/tools/ai-web-tools
+npm install
+npm run chrome:start
+# 调试 Chrome 登录 gemini.google.com
 
-确认结构后，再按 `docs/design/` 顺序开发。
+npm run probe
+node interfaces/cli/cli.mjs gemini chat "你好" --new --new-tab
+node interfaces/cli/cli.mjs gemini explore
+node interfaces/cli/cli.mjs gemini gen image "一只猫" --new
+npm run status
+```
+
+代码：
+
+```js
+import { connectBrowser, closeBrowser, GeminiClient } from './index.mjs';
+
+const browser = await connectBrowser();
+try {
+  const g = await GeminiClient.attach(browser, { forceNewTab: true });
+  const r = await g.chat('你好', { newChat: true });
+  console.log(r.reply, r.session);
+} finally {
+  await closeBrowser(browser);
+}
+```
+
+## 文档
+
+| 文档 | 说明 |
+|------|------|
+| [docs/guides/getting-started.md](./docs/guides/getting-started.md) | 入门 |
+| [docs/guides/gemini.md](./docs/guides/gemini.md) | Gemini 完整能力 |
+| [docs/guides/grok.md](./docs/guides/grok.md) | Grok |
+| [docs/guides/qianwen.md](./docs/guides/qianwen.md) | 千问 |
+| [docs/guides/claude.md](./docs/guides/claude.md) | Claude |
+| [docs/guides/chatgpt.md](./docs/guides/chatgpt.md) | ChatGPT |
+
+## 实现状态
+
+| 模块 | 状态 |
+|------|------|
+| `shared/` browser · session · types | ✅ |
+| `providers/gemini` | ✅ 全量接口 |
+| 其他 providers | 📄 文档 / 待实现 |
+| `interfaces/cli` | ✅ Gemini 子命令 |
+| Telegram adapter | 📄 manifest 规划 |
