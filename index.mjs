@@ -56,3 +56,13 @@ export {
   XYQ_TOOL_DEFINITIONS,
   runXyqTool,
 } from './providers/xyq/index.mjs';
+export {
+  QianwenClient,
+  QIANWEN_URL,
+  QIANWEN_ORIGIN,
+  QIANWEN_MODES,
+  QIANWEN_MODE_IDS,
+  EDITOR_SEL as QIANWEN_EDITOR_SEL,
+  QIANWEN_TOOL_DEFINITIONS,
+  runQianwenTool,
+} from './providers/qianwen/index.mjs';

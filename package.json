@@ -11,6 +11,7 @@
     "./chatgpt": "./providers/chatgpt/index.mjs",
     "./grok": "./providers/grok/index.mjs",
     "./xyq": "./providers/xyq/index.mjs",
+    "./qianwen": "./providers/qianwen/index.mjs",
     "./shared": "./shared/index.mjs"
   },
   "scripts": {
@@ -28,8 +29,14 @@
     "xyq:image": "node interfaces/cli/cli.mjs xyq image",
     "xyq:explore": "node interfaces/cli/cli.mjs xyq explore",
     "xyq:credits": "node interfaces/cli/cli.mjs xyq credits",
+    "qianwen:chat": "node interfaces/cli/cli.mjs qianwen chat",
+    "qianwen:research": "node interfaces/cli/cli.mjs qianwen research",
+    "qianwen:task": "node interfaces/cli/cli.mjs qianwen task",
+    "qianwen:explore": "node interfaces/cli/cli.mjs qianwen explore",
     "test:xyq:e2e": "node tests/providers/xyq/e2e-combo.mjs",
     "test:xyq:bot": "node tests/providers/xyq/bot-tools.mjs",
+    "test:qianwen:bot": "node tests/providers/qianwen/bot-tools.mjs",
+    "test:qianwen:research": "node tests/providers/qianwen/research-smoke.mjs",
     "status": "node interfaces/cli/cli.mjs status",
     "probe": "node interfaces/cli/cli.mjs probe",
     "test:smoke": "node tests/smoke/cdp.mjs",
@@ -53,6 +60,7 @@
     "chatgpt",
     "seedream",
     "xyq",
+    "qianwen",
     "browser-automation",
     "telegram"
   ]

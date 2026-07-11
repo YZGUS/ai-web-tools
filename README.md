@@ -6,7 +6,7 @@
 |----|-----|
 | 包名 | `ai-web-tools` |
 | 路径 | `tools/ai-web-tools` |
-| 阶段 | **Gemini / ChatGPT / Grok / 小云雀** 已实现；千问/Claude 待办 |
+| 阶段 | **Gemini / ChatGPT / Grok / 小云雀 / 千问** 已实现；Claude 待办 |
 
 ## 解决什么问题
 
@@ -48,7 +48,7 @@ ai-web-tools/
 | `chatgpt` | chatgpt.com | 对话 + Images 2.0 生图 |
 | `grok` | grok.com/imagine | 文生图 / 多参考图 / 视频 |
 | `xyq` | xyq.jianying.com | Seedream 5.0 Lite/Pro + @ 参考图 |
-| `qianwen` | qianwen.com | 对话（待实现） |
+| `qianwen` | qianwen.com/chat | 对话 · **研究模式** · **任务助理**（长任务） |
 | `claude` | claude.ai | 对话（待实现） |
 
 ## 快速开始
@@ -78,6 +78,11 @@ npm run xyq:image -- "图1人物图2场景" --model lite --ref a.png --ref b.png
 npm run test:xyq:e2e
 npm run test:xyq:bot
 
+# 千问：研究 / 任务助理（长任务，默认超时 15min）
+npm run qianwen:research -- "简要调研 RISC-V 生态，列三点"
+npm run qianwen:task -- "写一份技术周报大纲"
+npm run test:qianwen:bot -- --schema-only
+
 npm run status
 ```
 
@@ -91,6 +96,7 @@ import {
   ChatgptClient,
   GrokImagineClient,
   XyqClient,
+  QianwenClient,
   runXyqTool,
 } from './index.mjs';
 
@@ -107,6 +113,9 @@ try {
 
   const xyq = await XyqClient.attach(browser, { forceNewTab: true });
   console.log((await xyq.generateImage('水彩橘猫')).imagePath); // 默认 lite
+
+  const qw = await QianwenClient.attach(browser, { forceNewTab: true });
+  console.log((await qw.research('简要调研 RISC-V')).reply?.slice(0, 120));
 } finally {
   await closeBrowser(browser);
 }
@@ -136,6 +145,7 @@ try {
 | `providers/chatgpt` | ✅ chat + Images 2.0 生图 |
 | `providers/grok` | ✅ Imagine 图/视频/多参考图 |
 | `providers/xyq` | ✅ Seedream 5.0 Lite/Pro + @ 参考图 |
-| `interfaces/cli` | ✅ gemini / chatgpt / grok / xyq 子命令 |
+| `providers/qianwen` | ✅ chat / 研究 / 任务助理（长任务完成检测） |
+| `interfaces/cli` | ✅ gemini / chatgpt / grok / xyq / qianwen 子命令 |
 | Telegram adapter | 📄 manifest 部分 ready |
-| 其他 providers（千问/Claude） | 📄 文档 / 待实现 |
+| Claude | 📄 文档 / 待实现 |

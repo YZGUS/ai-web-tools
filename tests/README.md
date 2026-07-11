@@ -11,7 +11,9 @@
 | `providers/gemini/full-suite.mjs` | **一键跑完整套件** |
 | `providers/xyq/e2e-combo.mjs` | 小云雀：人物图 → 场景图 → @ 拼接（Lite+1K） |
 | `providers/xyq/bot-tools.mjs` | 小云雀 tool schema / 可选 live explore |
-| `providers/grok|qianwen|claude|chatgpt/` | 其他提供方（部分已实现 / 待补测试） |
+| `providers/qianwen/bot-tools.mjs` | 千问 tool schema |
+| `providers/qianwen/research-smoke.mjs` | 千问研究/任务助理真实长任务冒烟 |
+| `providers/grok|claude|chatgpt/` | 其他提供方（部分已实现 / 待补测试） |
 
 ## 运行
 
@@ -36,6 +38,11 @@ npm run test:smoke
 npm run test:xyq:bot
 npm run test:xyq:bot -- --schema-only
 npm run test:xyq:e2e
+
+# 千问（研究/任务助理为长任务）
+npm run test:qianwen:bot -- --schema-only
+npm run test:qianwen:research
+npm run test:qianwen:research -- --task
 ```
 
 ## 报告产物

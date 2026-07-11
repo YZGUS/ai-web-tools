@@ -16,6 +16,8 @@
     { "name": "web_video", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
     { "name": "web_music", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
     { "name": "web_research", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
+    { "name": "web_research_qianwen", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" },
+    { "name": "web_task_qianwen", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" },
     { "name": "web_canvas", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
     { "name": "gemini_explore", "status": "ready", "provider": "gemini" },
     { "name": "chatgpt_explore", "status": "ready", "provider": "chatgpt" },
@@ -26,6 +28,10 @@
     { "name": "grok_imagine_explore", "status": "ready", "provider": "grok" },
     { "name": "xyq_image", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
     { "name": "xyq_credits", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
-    { "name": "xyq_explore", "status": "ready", "provider": "xyq", "via": "runXyqTool" }
+    { "name": "xyq_explore", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
+    { "name": "qianwen_chat", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" },
+    { "name": "qianwen_research", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" },
+    { "name": "qianwen_task", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" },
+    { "name": "qianwen_explore", "status": "ready", "provider": "qianwen", "via": "runQianwenTool" }
   ]
 }

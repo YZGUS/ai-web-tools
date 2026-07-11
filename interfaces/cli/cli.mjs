@@ -28,6 +28,8 @@ import {
   runGrokTool,
   XyqClient,
   runXyqTool,
+  QianwenClient,
+  runQianwenTool,
 } from '../../index.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -62,6 +64,11 @@ ai-web-tools CLI
                          （默认 lite；pro 多需会员）
             仅 Seedream 5.0 Pro/Lite；--ref 对应页面 @/上传参考图
 
+  qianwen open | health | explore [--new-tab]
+  qianwen chat "<prompt>" [--mode chat|think|research|task] [--timeout ms]
+  qianwen research "<prompt>" [--timeout ms]   # 长任务，默认 15min
+  qianwen task "<prompt>" [--timeout ms]       # 任务助理，长任务
+
   tool <name> --arg key=val     经各 provider dispatch 分发
 
 示例:
@@ -71,6 +78,8 @@ ai-web-tools CLI
   node interfaces/cli/cli.mjs xyq image "水彩橘猫"              # 默认 lite
   node interfaces/cli/cli.mjs xyq image "图1人物图2画风" --model lite --ref a.png --ref b.png
   node interfaces/cli/cli.mjs xyq image "…" --model pro        # 需会员
+  node interfaces/cli/cli.mjs qianwen research "调研 RISC-V 生态，列三点"
+  node interfaces/cli/cli.mjs qianwen task "写一份技术周报大纲"
 `);
 }
 
@@ -86,6 +95,7 @@ function parseArgs(argv) {
     duration: undefined,
     preset: undefined,
     model: undefined,
+    mode: undefined,
   };
   for (let i = 0; i < argv.length; i++) {
     const x = argv[i];
@@ -100,6 +110,7 @@ function parseArgs(argv) {
     else if (x === '--duration') a.duration = argv[++i];
     else if (x === '--preset') a.preset = argv[++i];
     else if (x === '--model') a.model = argv[++i];
+    else if (x === '--mode') a.mode = argv[++i];
     else if (x === '--arg') {
       const [k, ...rest] = (argv[++i] || '').split('=');
       a.args[k] = rest.join('=');
@@ -176,6 +187,19 @@ async function withXyq(args, fn) {
   }
 }
 
+async function withQianwen(args, fn) {
+  const browser = await connectBrowser();
+  try {
+    const client = await QianwenClient.attach(browser, {
+      forceNewTab: args.newTab !== false,
+      runtimeDir: RUNTIME_ROOT,
+    });
+    return await fn(client);
+  } finally {
+    await closeBrowser(browser);
+  }
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const cmd = args._[0];
@@ -220,13 +244,19 @@ async function main() {
       const isGrok = name.startsWith('grok_');
       const isXyq =
         name.startsWith('xyq_') || name === 'web_image_xyq';
-      const result = isXyq
-        ? await runXyqTool(payload)
-        : isGrok
-          ? await runGrokTool(payload)
-          : isChatgpt
-            ? await runChatgptTool(payload)
-            : await runGeminiTool(payload);
+      const isQianwen =
+        name.startsWith('qianwen_') ||
+        name === 'web_research_qianwen' ||
+        name === 'web_task_qianwen';
+      const result = isQianwen
+        ? await runQianwenTool(payload)
+        : isXyq
+          ? await runXyqTool(payload)
+          : isGrok
+            ? await runGrokTool(payload)
+            : isChatgpt
+              ? await runChatgptTool(payload)
+              : await runGeminiTool(payload);
       console.log(JSON.stringify(result, null, 2));
       return;
     }
@@ -449,6 +479,69 @@ async function main() {
         }
       });
       console.log(JSON.stringify({ ok: result?.ok !== false, ...result }, null, 2));
+      return;
+    }
+    if (cmd === 'qianwen' || cmd === 'qw') {
+      const sub = args._[1] || 'health';
+      const rest = args._.slice(2).join(' ').trim();
+      const result = await withQianwen(args, async (c) => {
+        switch (sub) {
+          case 'open':
+            return c.open({ timeout: args.timeout, newChat: !!args.new });
+          case 'health':
+            return c.healthCheck();
+          case 'explore':
+            return c.explore();
+          case 'chat': {
+            if (!rest) {
+              throw new AiWebError(
+                '用法: qianwen chat "<prompt>" [--mode chat|think|research|task]',
+              );
+            }
+            return c.chat(rest, {
+              mode: args.mode || args.args.mode || 'chat',
+              timeout: args.timeout,
+              newChat: args.new !== false,
+            });
+          }
+          case 'research':
+          case 'study': {
+            if (!rest) {
+              throw new AiWebError('用法: qianwen research "<prompt>"');
+            }
+            return c.research(rest, {
+              timeout: args.timeout,
+              newChat: args.new !== false,
+            });
+          }
+          case 'task':
+          case 'assistant': {
+            if (!rest) {
+              throw new AiWebError('用法: qianwen task "<prompt>"');
+            }
+            return c.taskAssistant(rest, {
+              timeout: args.timeout,
+              newChat: args.new !== false,
+            });
+          }
+          case 'screenshot': {
+            await c.open().catch(() => {});
+            const p = await c.screenshot({
+              path: args.out ? path.resolve(args.out) : undefined,
+            });
+            return { ok: true, path: p };
+          }
+          default:
+            throw new AiWebError(`未知 qianwen 子命令: ${sub}`);
+        }
+      });
+      // 长任务回复可能很大，截断打印
+      const printable = { ok: result?.ok !== false, ...result };
+      if (typeof printable.reply === 'string' && printable.reply.length > 4000) {
+        printable.replyPreview = printable.reply.slice(0, 4000) + '…';
+        delete printable.reply;
+      }
+      console.log(JSON.stringify(printable, null, 2));
       return;
     }
     throw new AiWebError(`未知命令: ${cmd}`);

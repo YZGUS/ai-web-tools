@@ -27,5 +27,5 @@ AI **网页提供方**。一站一目录。
 | chatgpt | [guides/chatgpt.md](../docs/guides/chatgpt.md) | ✅ `ChatgptClient`（chat + Images 2.0 生图） |
 | grok | [guides/grok.md](../docs/guides/grok.md) | ✅ `GrokImagineClient`（图/视频/多参考图） |
 | xyq | [guides/xyq.md](../docs/guides/xyq.md) | ✅ `XyqClient`（仅 Seedream 5.0 Pro/Lite + @ 参考图） |
-| qianwen | [guides/qianwen.md](../docs/guides/qianwen.md) | 待实现 |
+| qianwen | [guides/qianwen.md](../docs/guides/qianwen.md) | ✅ `QianwenClient`（chat / 研究 / 任务助理，长任务完成检测） |
 | claude | [guides/claude.md](../docs/guides/claude.md) | 待实现 |
