@@ -6,9 +6,10 @@ AI **网页提供方**。一站一目录。
 |----|------|
 | gemini | `gemini/` |
 | grok | `grok/` |
+| chatgpt | `chatgpt/` |
+| xyq | `xyq/`（小云雀 · Seedream 5.0） |
 | qianwen | `qianwen/` |
 | claude | `claude/` |
-| chatgpt | `chatgpt/` |
 
 每个提供方：
 
@@ -25,5 +26,6 @@ AI **网页提供方**。一站一目录。
 | gemini | [guides/gemini.md](../docs/guides/gemini.md) | ✅ `GeminiClient` 全量 |
 | chatgpt | [guides/chatgpt.md](../docs/guides/chatgpt.md) | ✅ `ChatgptClient`（chat + Images 2.0 生图） |
 | grok | [guides/grok.md](../docs/guides/grok.md) | ✅ `GrokImagineClient`（图/视频/多参考图） |
+| xyq | [guides/xyq.md](../docs/guides/xyq.md) | ✅ `XyqClient`（仅 Seedream 5.0 Pro/Lite + @ 参考图） |
 | qianwen | [guides/qianwen.md](../docs/guides/qianwen.md) | 待实现 |
 | claude | [guides/claude.md](../docs/guides/claude.md) | 待实现 |

@@ -26,6 +26,8 @@ import {
   runChatgptTool,
   GrokImagineClient,
   runGrokTool,
+  XyqClient,
+  runXyqTool,
 } from '../../index.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -55,14 +57,20 @@ ai-web-tools CLI
             [--ratio 16:9] [--ref path]... [--out name] [--timeout ms]
   grok gen <image|video|agent> "<prompt>" [同上选项]
 
+  xyq open | health | explore | credits [--new-tab]
+  xyq image "<prompt>" [--model lite|pro] [--ref path]... [--out name] [--timeout ms]
+                         （默认 lite；pro 多需会员）
+            仅 Seedream 5.0 Pro/Lite；--ref 对应页面 @/上传参考图
+
   tool <name> --arg key=val     经各 provider dispatch 分发
 
 示例:
   node interfaces/cli/cli.mjs gemini gen image "水彩橘猫" --new
   node interfaces/cli/cli.mjs chatgpt image "唐代疆域分布图"
   node interfaces/cli/cli.mjs grok image "水彩橘猫" --ratio 1:1
-  node interfaces/cli/cli.mjs grok video "镜头推进的赛博城市" --resolution 480p --duration 6s
-  node interfaces/cli/cli.mjs grok image "参考人物改成唐朝服饰" --ref a.png --ref b.png
+  node interfaces/cli/cli.mjs xyq image "水彩橘猫"              # 默认 lite
+  node interfaces/cli/cli.mjs xyq image "图1人物图2画风" --model lite --ref a.png --ref b.png
+  node interfaces/cli/cli.mjs xyq image "…" --model pro        # 需会员
 `);
 }
 
@@ -77,6 +85,7 @@ function parseArgs(argv) {
     resolution: undefined,
     duration: undefined,
     preset: undefined,
+    model: undefined,
   };
   for (let i = 0; i < argv.length; i++) {
     const x = argv[i];
@@ -90,6 +99,7 @@ function parseArgs(argv) {
     else if (x === '--resolution') a.resolution = argv[++i];
     else if (x === '--duration') a.duration = argv[++i];
     else if (x === '--preset') a.preset = argv[++i];
+    else if (x === '--model') a.model = argv[++i];
     else if (x === '--arg') {
       const [k, ...rest] = (argv[++i] || '').split('=');
       a.args[k] = rest.join('=');
@@ -153,6 +163,19 @@ function grokGenerateOpts(args) {
   };
 }
 
+async function withXyq(args, fn) {
+  const browser = await connectBrowser();
+  try {
+    const client = await XyqClient.attach(browser, {
+      forceNewTab: args.newTab !== false,
+      runtimeDir: RUNTIME_ROOT,
+    });
+    return await fn(client);
+  } finally {
+    await closeBrowser(browser);
+  }
+}
+
 async function main() {
   const args = parseArgs(process.argv.slice(2));
   const cmd = args._[0];
@@ -195,11 +218,15 @@ async function main() {
       const isChatgpt =
         name.startsWith('chatgpt_') || name === 'web_image_chatgpt';
       const isGrok = name.startsWith('grok_');
-      const result = isGrok
-        ? await runGrokTool(payload)
-        : isChatgpt
-          ? await runChatgptTool(payload)
-          : await runGeminiTool(payload);
+      const isXyq =
+        name.startsWith('xyq_') || name === 'web_image_xyq';
+      const result = isXyq
+        ? await runXyqTool(payload)
+        : isGrok
+          ? await runGrokTool(payload)
+          : isChatgpt
+            ? await runChatgptTool(payload)
+            : await runGeminiTool(payload);
       console.log(JSON.stringify(result, null, 2));
       return;
     }
@@ -370,6 +397,55 @@ async function main() {
           }
           default:
             throw new AiWebError(`未知 grok 子命令: ${sub}`);
+        }
+      });
+      console.log(JSON.stringify({ ok: result?.ok !== false, ...result }, null, 2));
+      return;
+    }
+    if (cmd === 'xyq') {
+      const sub = args._[1] || 'health';
+      const rest = args._.slice(2).join(' ').trim();
+      const result = await withXyq(args, async (c) => {
+        switch (sub) {
+          case 'open':
+            return c.open({ timeout: args.timeout });
+          case 'health':
+            return c.healthCheck();
+          case 'explore':
+            return c.explore();
+          case 'credits':
+          case 'credit': {
+            await c.open({ waitReady: true }).catch(() => {});
+            return { ok: true, credit: await c.getCredits() };
+          }
+          case 'models':
+            await c.open({ waitReady: true }).catch(() => {});
+            return c.listModels();
+          case 'image':
+          case 'gen': {
+            if (!rest) {
+              throw new AiWebError(
+                '用法: xyq image "<prompt>" [--model lite|pro] [--ref path]（默认 lite）',
+              );
+            }
+            return c.generateImage(rest, {
+              model: args.model || 'lite',
+              timeout: args.timeout,
+              filename: args.out,
+              refImages: args.refs.length
+                ? args.refs.map((p) => path.resolve(p))
+                : undefined,
+            });
+          }
+          case 'screenshot': {
+            await c.open().catch(() => {});
+            const p = await c.screenshot({
+              path: args.out ? path.resolve(args.out) : undefined,
+            });
+            return { ok: true, path: p };
+          }
+          default:
+            throw new AiWebError(`未知 xyq 子命令: ${sub}`);
         }
       });
       console.log(JSON.stringify({ ok: result?.ok !== false, ...result }, null, 2));

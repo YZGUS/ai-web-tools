@@ -45,3 +45,14 @@ export {
   GROK_TOOL_DEFINITIONS,
   runGrokTool,
 } from './providers/grok/index.mjs';
+export {
+  XyqClient,
+  XYQ_URL,
+  XYQ_ORIGIN,
+  DEFAULT_SEEDREAM_MODEL,
+  SEEDREAM_MODELS,
+  SEEDREAM_MODEL_IDS,
+  EDITOR_SEL as XYQ_EDITOR_SEL,
+  XYQ_TOOL_DEFINITIONS,
+  runXyqTool,
+} from './providers/xyq/index.mjs';

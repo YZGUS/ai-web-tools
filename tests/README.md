@@ -9,7 +9,9 @@
 | `providers/gemini/media.mjs` | Gemini 多媒体真实生成（图/视频/音乐/研究/Canvas） |
 | `providers/gemini/bot-tools.mjs` | Bot tool 定义与分发 |
 | `providers/gemini/full-suite.mjs` | **一键跑完整套件** |
-| `providers/grok|qianwen|claude|chatgpt/` | 其他提供方（待实现） |
+| `providers/xyq/e2e-combo.mjs` | 小云雀：人物图 → 场景图 → @ 拼接（Lite+1K） |
+| `providers/xyq/bot-tools.mjs` | 小云雀 tool schema / 可选 live explore |
+| `providers/grok|qianwen|claude|chatgpt/` | 其他提供方（部分已实现 / 待补测试） |
 
 ## 运行
 
@@ -29,6 +31,11 @@ npm run test:gemini:media
 npm run test:gemini:media -- --only image,music
 npm run test:gemini:bot
 npm run test:smoke
+
+# 小云雀 Seedream
+npm run test:xyq:bot
+npm run test:xyq:bot -- --schema-only
+npm run test:xyq:e2e
 ```
 
 ## 报告产物

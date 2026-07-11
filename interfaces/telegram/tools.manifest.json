@@ -9,6 +9,7 @@
     { "name": "web_chat", "status": "planned" },
     { "name": "web_image", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
     { "name": "web_image_chatgpt", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
+    { "name": "web_image_xyq", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
     { "name": "chatgpt_image", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
     { "name": "chatgpt_chat", "status": "ready", "provider": "chatgpt", "via": "runChatgptTool" },
     { "name": "gemini_chat", "status": "ready", "provider": "gemini", "via": "runGeminiTool" },
@@ -22,6 +23,9 @@
     { "name": "grok_imagine_image", "status": "ready", "provider": "grok", "via": "runGrokTool" },
     { "name": "grok_imagine_video", "status": "ready", "provider": "grok", "via": "runGrokTool" },
     { "name": "grok_imagine", "status": "ready", "provider": "grok", "via": "runGrokTool" },
-    { "name": "grok_imagine_explore", "status": "ready", "provider": "grok" }
+    { "name": "grok_imagine_explore", "status": "ready", "provider": "grok" },
+    { "name": "xyq_image", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
+    { "name": "xyq_credits", "status": "ready", "provider": "xyq", "via": "runXyqTool" },
+    { "name": "xyq_explore", "status": "ready", "provider": "xyq", "via": "runXyqTool" }
   ]
 }

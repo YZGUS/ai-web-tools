@@ -33,6 +33,11 @@ gemini_set_mode
 |------|------|---------------|--------|
 | `web_chat` | 网页端对话 | 参数指定 | P0 |
 | `web_image` | 生成图片 | gemini | P0 |
+| `web_image_chatgpt` | 生成图片（ChatGPT Images） | chatgpt | P0 |
+| `web_image_xyq` | 生成图片（小云雀 Seedream） | xyq | P0 |
+| `xyq_image` | Seedream 5.0 生图 / 多参考图 | xyq | P0 |
+| `xyq_credits` | 小云雀积分 | xyq | P1 |
+| `xyq_explore` | 小云雀能力探测 | xyq | P1 |
 | `web_video` | 生成视频 | gemini | P1 |
 | `web_music` | 生成音乐 | gemini | P1 |
 | `web_research` | 深度研究 | gemini | P1 |

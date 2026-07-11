@@ -2,7 +2,7 @@
   "name": "ai-web-tools",
   "version": "0.1.0",
   "private": true,
-  "description": "AI Web 端常用工具集成：Gemini / Grok / 千问 / Claude / ChatGPT",
+  "description": "AI Web 端常用工具集成：Gemini / Grok / ChatGPT / 小云雀(Seedream) / 千问 / Claude",
   "type": "module",
   "main": "index.mjs",
   "exports": {
@@ -10,6 +10,7 @@
     "./gemini": "./providers/gemini/index.mjs",
     "./chatgpt": "./providers/chatgpt/index.mjs",
     "./grok": "./providers/grok/index.mjs",
+    "./xyq": "./providers/xyq/index.mjs",
     "./shared": "./shared/index.mjs"
   },
   "scripts": {
@@ -24,6 +25,11 @@
     "grok:image": "node interfaces/cli/cli.mjs grok image",
     "grok:video": "node interfaces/cli/cli.mjs grok video",
     "grok:explore": "node interfaces/cli/cli.mjs grok explore",
+    "xyq:image": "node interfaces/cli/cli.mjs xyq image",
+    "xyq:explore": "node interfaces/cli/cli.mjs xyq explore",
+    "xyq:credits": "node interfaces/cli/cli.mjs xyq credits",
+    "test:xyq:e2e": "node tests/providers/xyq/e2e-combo.mjs",
+    "test:xyq:bot": "node tests/providers/xyq/bot-tools.mjs",
     "status": "node interfaces/cli/cli.mjs status",
     "probe": "node interfaces/cli/cli.mjs probe",
     "test:smoke": "node tests/smoke/cdp.mjs",
@@ -43,6 +49,10 @@
   "keywords": [
     "ai",
     "gemini",
+    "grok",
+    "chatgpt",
+    "seedream",
+    "xyq",
     "browser-automation",
     "telegram"
   ]

@@ -6,14 +6,14 @@
 |----|-----|
 | 包名 | `ai-web-tools` |
 | 路径 | `tools/ai-web-tools` |
-| 阶段 | **Gemini 已实现**；其余提供方文档就绪、代码待办 |
+| 阶段 | **Gemini / ChatGPT / Grok / 小云雀** 已实现；千问/Claude 待办 |
 
 ## 解决什么问题
 
 在浏览器里已经登录的 AI 站点上，用自动化执行「常用能力」，并对外暴露稳定接口：
 
-- **对话**：Gemini / Grok / 千问 / Claude / ChatGPT  
-- **生成类**（优先 Gemini）：图片、视频、音乐、Deep Research、Canvas 等  
+- **对话**：Gemini / ChatGPT（Grok / 千问 / Claude 规划中）  
+- **生成类**：Gemini 多模态 · ChatGPT Images · Grok Imagine · **小云雀 Seedream 5.0**  
 - **可观测**：任务进行中 / 已完成 / 失败；对话可落盘  
 - **Bot 就绪**：上层只认 tool 名与参数，不碰 DOM  
 
@@ -31,7 +31,7 @@
 ```text
 ai-web-tools/
   shared/          公共内核（browser / session / types）
-  providers/       AI 网页提供方（gemini · grok · qianwen · claude · chatgpt）
+  providers/       AI 网页提供方（gemini · grok · chatgpt · xyq · …）
   catalog/         面向用户的「工具目录」定义（chat / image / video…）
   app/             路由：工具 → 提供方能力
   interfaces/      cli · telegram
@@ -44,18 +44,12 @@ ai-web-tools/
 
 | id | 站点 | 首期重点 |
 |----|------|----------|
-| `gemini` | gemini.google.com | 对话 + 多模态工具（P0） |
-| `grok` | grok.com | 对话 |
-| `qianwen` | qianwen.com | 对话 |
-| `claude` | claude.ai | 对话 |
-| `chatgpt` | chatgpt.com | 对话 |
-
-## 与旧目录
-
-| 旧路径 | 说明 |
-|--------|------|
-| `web-auto` | 已废弃删除，由本项目接替 |
-| `test/page-automation`、`toolkit` | 历史实验/工具，**不依赖**；实现时可参考 |
+| `gemini` | gemini.google.com | 对话 + 多模态工具 |
+| `chatgpt` | chatgpt.com | 对话 + Images 2.0 生图 |
+| `grok` | grok.com/imagine | 文生图 / 多参考图 / 视频 |
+| `xyq` | xyq.jianying.com | Seedream 5.0 Lite/Pro + @ 参考图 |
+| `qianwen` | qianwen.com | 对话（待实现） |
+| `claude` | claude.ai | 对话（待实现） |
 
 ## 快速开始
 
@@ -63,7 +57,7 @@ ai-web-tools/
 cd /Users/cengyi/Desktop/tools/ai-web-tools
 npm install
 npm run chrome:start
-# 调试 Chrome 登录 gemini.google.com 与/或 chatgpt.com
+# 调试 Chrome 登录对应站点
 
 npm run probe
 
@@ -77,6 +71,13 @@ npm run chatgpt:image -- "水彩橘猫"
 # Grok Imagine
 npm run grok:image -- "水彩橘猫" --ratio 1:1
 npm run grok:video -- "海浪拍岸" --resolution 480p --duration 6s
+
+# 小云雀 Seedream（默认 lite + 1K，无会员可验证）
+npm run xyq:image -- "水彩橘猫"
+npm run xyq:image -- "图1人物图2场景" --model lite --ref a.png --ref b.png
+npm run test:xyq:e2e
+npm run test:xyq:bot
+
 npm run status
 ```
 
@@ -89,6 +90,8 @@ import {
   GeminiClient,
   ChatgptClient,
   GrokImagineClient,
+  XyqClient,
+  runXyqTool,
 } from './index.mjs';
 
 const browser = await connectBrowser();
@@ -101,9 +104,15 @@ try {
 
   const gi = await GrokImagineClient.attach(browser, { forceNewTab: true });
   console.log((await gi.generateImage('水彩橘猫', { ratio: '1:1' })).filePath);
+
+  const xyq = await XyqClient.attach(browser, { forceNewTab: true });
+  console.log((await xyq.generateImage('水彩橘猫')).imagePath); // 默认 lite
 } finally {
   await closeBrowser(browser);
 }
+
+// 统一 tool 分发（Bot 同构）
+// await runXyqTool({ name: 'xyq_image', arguments: { prompt: '…', model: 'lite' } });
 ```
 
 ## 文档
@@ -113,7 +122,8 @@ try {
 | [docs/guides/getting-started.md](./docs/guides/getting-started.md) | 入门 |
 | [docs/guides/gemini.md](./docs/guides/gemini.md) | Gemini 完整能力 |
 | [docs/guides/chatgpt.md](./docs/guides/chatgpt.md) | ChatGPT 对话 + 生图 |
-| [docs/guides/grok.md](./docs/guides/grok.md) | Grok |
+| [docs/guides/grok.md](./docs/guides/grok.md) | Grok Imagine |
+| [docs/guides/xyq.md](./docs/guides/xyq.md) | 小云雀 Seedream 5.0 |
 | [docs/guides/qianwen.md](./docs/guides/qianwen.md) | 千问 |
 | [docs/guides/claude.md](./docs/guides/claude.md) | Claude |
 
@@ -125,6 +135,7 @@ try {
 | `providers/gemini` | ✅ 全量接口 |
 | `providers/chatgpt` | ✅ chat + Images 2.0 生图 |
 | `providers/grok` | ✅ Imagine 图/视频/多参考图 |
-| `interfaces/cli` | ✅ gemini / chatgpt / grok 子命令 |
+| `providers/xyq` | ✅ Seedream 5.0 Lite/Pro + @ 参考图 |
+| `interfaces/cli` | ✅ gemini / chatgpt / grok / xyq 子命令 |
 | Telegram adapter | 📄 manifest 部分 ready |
 | 其他 providers（千问/Claude） | 📄 文档 / 待实现 |
