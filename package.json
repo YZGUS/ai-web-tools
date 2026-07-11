@@ -37,6 +37,7 @@
     "test:xyq:bot": "node tests/providers/xyq/bot-tools.mjs",
     "test:qianwen:bot": "node tests/providers/qianwen/bot-tools.mjs",
     "test:qianwen:research": "node tests/providers/qianwen/research-smoke.mjs",
+    "example:agent-result": "node examples/agent-tool-result.mjs",
     "status": "node interfaces/cli/cli.mjs status",
     "probe": "node interfaces/cli/cli.mjs probe",
     "test:smoke": "node tests/smoke/cdp.mjs",

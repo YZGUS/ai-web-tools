@@ -129,6 +129,7 @@ try {
 | 文档 | 说明 |
 |------|------|
 | [docs/guides/getting-started.md](./docs/guides/getting-started.md) | 入门 |
+| **[docs/guides/agent-tools.md](./docs/guides/agent-tools.md)** | **Agent 如何注册 tool / 拿结果（推荐）** |
 | [docs/guides/gemini.md](./docs/guides/gemini.md) | Gemini 完整能力 |
 | [docs/guides/chatgpt.md](./docs/guides/chatgpt.md) | ChatGPT 对话 + 生图 |
 | [docs/guides/grok.md](./docs/guides/grok.md) | Grok Imagine |

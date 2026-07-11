@@ -30,6 +30,8 @@ import {
   runXyqTool,
   QianwenClient,
   runQianwenTool,
+  runWebTool,
+  listWebTools,
 } from '../../index.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
@@ -69,7 +71,8 @@ ai-web-tools CLI
   qianwen research "<prompt>" [--timeout ms]   # 长任务，默认 15min
   qianwen task "<prompt>" [--timeout ms]       # 任务助理，长任务
 
-  tool <name> --arg key=val     经各 provider dispatch 分发
+  tool <name> --arg key=val     统一 Agent tool 入口（runWebTool，返回 content/text/files）
+  tools                         列出全部可注册 tool 名
 
 示例:
   node interfaces/cli/cli.mjs gemini gen image "水彩橘猫" --new
@@ -80,6 +83,8 @@ ai-web-tools CLI
   node interfaces/cli/cli.mjs xyq image "…" --model pro        # 需会员
   node interfaces/cli/cli.mjs qianwen research "调研 RISC-V 生态，列三点"
   node interfaces/cli/cli.mjs qianwen task "写一份技术周报大纲"
+  node interfaces/cli/cli.mjs tools
+  node interfaces/cli/cli.mjs tool xyq_image --arg prompt=水彩猫 --arg model=lite
 `);
 }
 
@@ -221,6 +226,25 @@ async function main() {
       );
       return;
     }
+    if (cmd === 'tools' || cmd === 'list-tools') {
+      const tools = listWebTools();
+      console.log(
+        JSON.stringify(
+          {
+            ok: true,
+            count: tools.length,
+            tools: tools.map((t) => ({
+              name: t.name,
+              description: t.description,
+              required: t.parameters?.required || [],
+            })),
+          },
+          null,
+          2,
+        ),
+      );
+      return;
+    }
     if (cmd === 'tool') {
       const name = args._[1];
       if (!name) throw new AiWebError('需要 tool name');
@@ -231,6 +255,8 @@ async function main() {
           prompt: args.args.prompt || args._.slice(2).join(' '),
           new_chat: args.new || args.args.new_chat === 'true',
           timeout_ms: args.timeout,
+          model: args.model || args.args.model,
+          mode: args.mode || args.args.mode,
           ref_images: args.refs.length
             ? args.refs
             : args.args.ref_images
@@ -239,25 +265,13 @@ async function main() {
           filename: args.out || args.args.filename,
         },
       };
-      const isChatgpt =
-        name.startsWith('chatgpt_') || name === 'web_image_chatgpt';
-      const isGrok = name.startsWith('grok_');
-      const isXyq =
-        name.startsWith('xyq_') || name === 'web_image_xyq';
-      const isQianwen =
-        name.startsWith('qianwen_') ||
-        name === 'web_research_qianwen' ||
-        name === 'web_task_qianwen';
-      const result = isQianwen
-        ? await runQianwenTool(payload)
-        : isXyq
-          ? await runXyqTool(payload)
-          : isGrok
-            ? await runGrokTool(payload)
-            : isChatgpt
-              ? await runChatgptTool(payload)
-              : await runGeminiTool(payload);
+      // 统一 Agent 格式：content / text / files
+      const result = await runWebTool(payload, {
+        throwOnError: false,
+        includeRaw: args.args.raw === 'true',
+      });
       console.log(JSON.stringify(result, null, 2));
+      process.exitCode = result.ok ? 0 : 1;
       return;
     }
     if (cmd === 'gemini') {

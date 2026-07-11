@@ -21,3 +21,9 @@ export {
   applyStealth,
 } from './browser/connect.mjs';
 export { SessionLog } from './session/session-log.mjs';
+export {
+  collectAgentFiles,
+  buildAgentContent,
+  toAgentResult,
+  toAgentError,
+} from './tools/agent-result.mjs';

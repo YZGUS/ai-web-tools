@@ -66,3 +66,18 @@ export {
   QIANWEN_TOOL_DEFINITIONS,
   runQianwenTool,
 } from './providers/qianwen/index.mjs';
+
+/**
+ * Agent 推荐入口：
+ *   import { listWebTools, runWebTool, agentResultToString } from 'ai-web-tools';
+ *   const tools = listWebTools();
+ *   const r = await runWebTool({ name: 'xyq_image', arguments: { prompt: '猫' } });
+ *   // r.content / r.text / r.files / r.imagePath
+ */
+export {
+  WEB_TOOL_DEFINITIONS,
+  listWebTools,
+  resolveToolProvider,
+  runWebTool,
+  agentResultToString,
+} from './interfaces/agent/run-web-tool.mjs';
